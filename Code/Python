@@ -1,0 +1,43 @@
+import pandas as pd
+data=pd.read_csv(r"C:\Users\Owner\AI_Trends_2023.csv")
+
+#CHECKING INFORMATION ABOUT THE DATA COLUMNS, 
+#SINCE I HAVE 4 COLUMNS THAT I NEED, I AM NOT DELETING ANY COLUMNS 
+
+
+#print(data.head())
+#print(data.columns)
+#print(data.info)
+#print(data.shape)
+
+#columns_to_keep=[video_id, title, publishedAt, tags]
+#print(len(columns_to_keep))
+#columns_to_drop=[.....] if i wanted to drop extra columns from my table
+
+#RENAME DATA COLUMNS
+data.rename(columns={"video_id": "Video_Id", "title": "Video_Title", "publishedAt": "Published_Date", "tags": "Tags", "channelTitle": "Channel_Title"}, inplace=True)
+
+#CHECK AGAIN FOR COLUMN NAMES
+print(data.columns)
+
+#CHECK FOR DUPLICATES COUNT AND DELETE DUPLICATES FROM THE DATA.
+print(data.duplicated().value_counts())
+data.drop_duplicates(inplace=True)
+
+#CHECK AGAIN TO VERIFY ALL THE DUPLICATES ARE REMOVED
+print(data.duplicated().value_counts())
+
+#NOW, CHECK FOR 'NA' VALUES
+print(data.isna().sum())
+print(data['Tags'].isna().sum())
+
+#SINCE THERE ARE 364 NA VALUES IN TAGS COLUMN, I AM USING MEAN/MEDIAN METHOD OF REPLACING NA VALUES WITH MOST COMMON VALUES.
+
+most_common_tag = data['Tags'].mode().iloc[0]
+print(f"Most common tag: {most_common_tag}")
+
+#MOST COMMON TAGS ARE "AI", "GENERATED", "LYRICS", "IMAGE", "MIDJOURNEY"
+
+data['Tags'].fillna(most_common_tag, inplace=True)
+
+data.to_csv('AI_Data_Cleaned.csv', index=False)
