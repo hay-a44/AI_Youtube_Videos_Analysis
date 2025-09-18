@@ -1,0 +1,24 @@
+import pandas as pd
+import os
+
+#SETTING PATH TO THE FOLDER CONTAINING MONTHLY CSV FILES
+
+folder_path=r'C:\Users\Owner\data\monthly'
+
+#GET ALL CSV FILES
+
+csv_files=[]
+for f in os.listdir(folder_path):
+    if f.endswith('.csv'):
+        csv_files.append(f)
+
+df_list=[]
+for f in csv_files:
+    file_path=os.path.join(folder_path,f)
+    df=pd.read_csv(file_path)
+    df_list.append(df)
+
+combined_df=pd.concat(df_list,ignore_index=True)
+
+combined_df.to_csv('AI_Trends_2023.csv', index=False)
+print("All files combined and Saved to 'AI_Trends_2023.csv'")
